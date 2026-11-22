@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ronnie Design · 网页设计与开发</title>
+<meta name="description" content="单页网站、展示型网站、定制开发。从设计到上线一个人完成，适合小店、工作室与个人品牌。">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230B0D12'/><path d='M28 72V28h20c11 0 19 7 19 17 0 12-10 19-22 19h-6v8z' fill='%23FF603E'/></svg>">
+<style>
+  :root{
+    --bg:#0B0D12;
+    --bg-soft:#10131B;
+    --card:#13161F;
+    --card-2:#171B26;
+    --line:#252A38;
+    --text:#EDEFF5;
+    --muted:#8B92A6;
+    --accent:#FF603E;
+    --accent-soft:rgba(255,96,62,.12);
+    --radius:18px;
+    --max:1120px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:"PingFang SC","Microsoft YaHei","Hiragino Sans GB",system-ui,-apple-system,sans-serif;
+    line-height:1.7;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  a{color:inherit;text-decoration:none}
+  img{max-width:100%;display:block}
+  .wrap{max-width:var(--max);margin:0 auto;padding:0 24px}
+
+  /* ---------- nav ---------- */
+  header{
+    position:fixed;top:0;left:0;right:0;z-index:50;
+    backdrop-filter:blur(14px);
+    background:rgba(11,13,18,.72);
+    border-bottom:1px solid transparent;
+    transition:border-color .3s ease,background .3s ease;
+  }
+  header.scrolled{border-bottom-color:var(--line);background:rgba(11,13,18,.9)}
+  .nav{display:flex;align-items:center;justify-content:space-between;height:68px}
+  .logo{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:.04em;font-size:15px}
+  .logo-mark{
+    width:28px;height:28px;border-radius:8px;background:var(--accent);
+    display:grid;place-items:center;color:#0B0D12;font-weight:800;font-size:15px;
+  }
+  .nav-links{display:flex;gap:32px;font-size:14px;color:var(--muted)}
+  .nav-links a{transition:color .2s}
+  .nav-links a:hover{color:var(--text)}
+  .nav-cta{
+    font-size:14px;padding:9px 18px;border-radius:999px;
+    border:1px solid var(--line);background:var(--card);
+    transition:border-color .2s,transform .2s;
+  }
+  .nav-cta:hover{border-color:var(--accent);transform:translateY(-1px)}
+  .menu-btn{display:none;background:none;border:0;color:var(--text);font-size:22px;cursor:pointer}
+
+  /* ---------- hero ---------- */
+  .hero{position:relative;padding:150px 0 90px;overflow:hidden}
+  .orb{position:absolute;border-radius:50%;filter:blur(90px);opacity:.5;pointer-events:none}
+  .orb-a{width:520px;height:520px;background:rgba(255,96,62,.22);top:-160px;right:-120px}
+  .orb-b{width:420px;height:420px;background:rgba(72,110,255,.16);bottom:-200px;left:-160px}
+  .hero-grid{position:relative;display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center}
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:8px;
+    font-size:13px;color:var(--accent);letter-spacing:.08em;
+    border:1px solid rgba(255,96,62,.35);background:var(--accent-soft);
+    padding:6px 14px;border-radius:999px;margin-bottom:26px;
+  }
+  .eyebrow::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--accent)}
+  h1{font-size:clamp(38px,5.4vw,64px);line-height:1.16;letter-spacing:-.02em;font-weight:800}
+  h1 em{font-style:normal;color:var(--accent)}
+  .hero p.lead{margin-top:24px;color:var(--muted);font-size:17px;max-width:480px}
+  .hero-actions{display:flex;gap:14px;margin-top:36px;flex-wrap:wrap}
+  .btn{
+    display:inline-flex;align-items:center;gap:8px;
+    padding:14px 26px;border-radius:999px;font-size:15px;font-weight:600;
+    transition:transform .2s,box-shadow .2s,background .2s;
+  }
+  .btn-primary{background:var(--accent);color:#0B0D12;box-shadow:0 10px 30px rgba(255,96,62,.25)}
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(255,96,62,.34)}
+  .btn-ghost{border:1px solid var(--line);color:var(--text);background:var(--card)}
+  .btn-ghost:hover{border-color:var(--accent);transform:translateY(-2px)}
+
+  .hero-visual{position:relative}
+  .browser-card{
+    background:var(--card);border:1px solid var(--line);border-radius:16px;
+    overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.55);
+    transform:rotate(-1.5deg);
+  }
+  .browser-bar{
+    display:flex;align-items:center;gap:6px;padding:12px 14px;
+    border-bottom:1px solid var(--line);background:var(--bg-soft);
+  }
+  .dot{width:9px;height:9px;border-radius:50%}
+  .dot.r{background:#FF5F57}.dot.y{background:#FEBC2E}.dot.g{background:#28C840}
+  .browser-bar .url{
+    margin-left:10px;font-size:11px;color:var(--muted);
+    background:#0B0D12;border-radius:6px;padding:3px 10px;flex:1;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  }
+  .hero-mock{padding:26px;background:linear-gradient(150deg,#141826,#0F121A)}
+  .hero-mock .mock-nav{display:flex;justify-content:space-between;align-items:center;margin-bottom:26px}
+  .mock-logo{width:64px;height:10px;border-radius:4px;background:var(--accent)}
+  .mock-links{display:flex;gap:10px}
+  .mock-links span{width:34px;height:7px;border-radius:4px;background:#2A3040}
+  .hero-mock h4{font-size:22px;line-height:1.4;letter-spacing:-.01em;margin-bottom:12px}
+  .hero-mock .lines{display:grid;gap:8px;margin-bottom:22px}
+  .hero-mock .lines span{height:8px;border-radius:4px;background:#2A3040}
+  .hero-mock .lines span:nth-child(1){width:78%}
+  .hero-mock .lines span:nth-child(2){width:60%}
+  .hero-mock .mock-btn{width:110px;height:30px;border-radius:999px;background:var(--accent);opacity:.9}
+  .hero-mock .mock-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:26px}
+  .hero-mock .mock-cards div{height:56px;border-radius:8px;background:#1B2130;border:1px solid #263044}
+  .float-badge{
+    position:absolute;right:-14px;bottom:-18px;
+    background:var(--card-2);border:1px solid var(--line);border-radius:14px;
+    padding:12px 18px;font-size:13px;color:var(--muted);
+    box-shadow:0 20px 40px rgba(0,0,0,.4);
+    display:flex;align-items:center;gap:10px;
+  }
+  .float-badge b{color:var(--text);font-size:15px}
+
+  /* ---------- stats ---------- */
+  .stats{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--bg-soft)}
+  .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line)}
+  .stat{background:var(--bg-soft);padding:30px 24px;text-align:center}
+  .stat b{display:block;font-size:26px;letter-spacing:-.01em}
+  .stat span{font-size:13px;color:var(--muted)}
+
+  /* ---------- section base ---------- */
+  section{padding:96px 0}
+  .section-head{display:flex;justify-content:space-between;align-items:flex-end;gap:32px;margin-bottom:52px}
+  .section-head h2{font-size:clamp(28px,3.4vw,40px);letter-spacing:-.02em;line-height:1.25}
+  .section-head p{color:var(--muted);font-size:15px;max-width:340px}
+  .kicker{
+    display:block;font-size:13px;color:var(--accent);letter-spacing:.14em;
+    text-transform:uppercase;margin-bottom:14px;
+  }
+
+  /* ---------- cases ---------- */
+  .cases{display:grid;grid-template-columns:repeat(2,1fr);gap:24px}
+  .case{
+    background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+    overflow:hidden;transition:transform .3s ease,border-color .3s ease;
+  }
+  .case:hover{transform:translateY(-4px);border-color:#39415430}
+  .shot{position:relative;padding:18px 18px 0;background:var(--bg-soft)}
+  .mini{height:250px;border-radius:10px 10px 0 0;overflow:hidden;position:relative;border:1px solid #2A3040;border-bottom:0}
+  .mini .m-nav{display:flex;justify-content:space-between;align-items:center;padding:12px 16px}
+  .mini .m-nav i{display:block;width:46px;height:7px;border-radius:4px;background:rgba(255,255,255,.55)}
+  .mini .m-nav u{display:flex;gap:8px}
+  .mini .m-nav u s{display:block;width:24px;height:5px;border-radius:3px;background:rgba(255,255,255,.28)}
+  .mini .m-hero{padding:16px;display:grid;gap:8px}
+  .mini .m-hero b{display:block;height:12px;border-radius:4px;background:rgba(255,255,255,.75)}
+  .mini .m-hero b:nth-child(1){width:82%}
+  .mini .m-hero b:nth-child(2){width:58%}
+  .mini .m-hero span{display:block;height:6px;border-radius:3px;background:rgba(255,255,255,.3);width:70%}
+  .mini .m-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:0 16px 16px}
+  .mini .m-grid i{display:block;height:52px;border-radius:6px;background:rgba(255,255,255,.16)}
+  .mini.photo{background:linear-gradient(160deg,#2B1D18,#121820)}
+  .mini.photo .m-nav i{background:#F0B27A}
+  .mini.photo .m-grid i{background:linear-gradient(145deg,#4A2F22,#26323F)}
+  .mini.cafe{background:linear-gradient(160deg,#EDE3D2,#D9C7AE)}
+  .mini.cafe .m-nav i{background:#4A3728}
+  .mini.cafe .m-nav u s{background:rgba(74,55,40,.35)}
+  .mini.cafe .m-hero b{background:#4A3728}
+  .mini.cafe .m-hero span{background:rgba(74,55,40,.4)}
+  .mini.cafe .m-grid i{background:rgba(74,55,40,.16)}
+  .mini.dev{background:linear-gradient(150deg,#101A2B,#0C1119)}
+  .mini.dev .m-nav i{background:#5B8CFF}
+  .mini.dev .m-hero b{background:#DCE6FF}
+  .mini.dev .m-grid i{background:rgba(91,140,255,.22);border:1px solid rgba(91,140,255,.3)}
+  .mini.event{background:linear-gradient(150deg,#FF7A4D,#B23A8E)}
+  .mini.event .m-nav i{background:#fff}
+  .mini.event .m-hero b{background:#fff}
+  .mini.event .m-hero span{background:rgba(255,255,255,.55)}
+  .mini.event .m-grid i{background:rgba(255,255,255,.25)}
+  .mini .m-form{position:absolute;left:16px;right:16px;bottom:16px;height:34px;border-radius:8px;background:rgba(255,255,255,.85)}
+  .case-body{padding:22px 24px 26px}
+  .case-body .tag{
+    display:inline-block;font-size:11px;letter-spacing:.08em;color:var(--muted);
+    border:1px solid var(--line);border-radius:999px;padding:2px 10px;margin-bottom:12px;
+  }
+  .case-body h3{font-size:18px;margin-bottom:6px}
+  .case-body p{font-size:14px;color:var(--muted)}
+
+  /* ---------- services ---------- */
+  .services{background:var(--bg-soft);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .service-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+  .service{
+    background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+    padding:30px 26px;display:flex;flex-direction:column;
+    transition:border-color .25s,transform .25s;
+  }
+  .service:hover{border-color:rgba(255,96,62,.45);transform:translateY(-3px)}
+  .service .num{font-size:12px;color:var(--accent);letter-spacing:.14em;margin-bottom:18px}
+  .service h3{font-size:20px;margin-bottom:10px}
+  .service .price{font-size:14px;color:var(--muted);margin-bottom:18px}
+  .service .price b{font-size:26px;color:var(--text);font-weight:700;margin-right:4px}
+  .service ul{list-style:none;display:grid;gap:10px;font-size:14px;color:var(--muted);margin-bottom:26px}
+  .service ul li{padding-left:18px;position:relative}
+  .service ul li::before{content:"";position:absolute;left:0;top:10px;width:6px;height:6px;border-radius:50%;background:var(--accent);opacity:.8}
+  .service .note{margin-top:auto;font-size:13px;color:#6F7688;border-top:1px solid var(--line);padding-top:16px}
+
+  /* ---------- process ---------- */
+  .steps{display:grid;grid-template-columns:repeat(5,1fr);gap:0;counter-reset:step}
+  .step{position:relative;padding:0 18px 0 0;counter-increment:step}
+  .step::before{
+    content:counter(step);display:grid;place-items:center;
+    width:40px;height:40px;border-radius:50%;
+    border:1px solid rgba(255,96,62,.4);background:var(--accent-soft);
+    color:var(--accent);font-size:14px;font-weight:700;margin-bottom:18px;
+  }
+  .step::after{
+    content:"";position:absolute;top:20px;left:48px;right:8px;height:1px;
+    background:linear-gradient(90deg,rgba(255,96,62,.35),transparent);
+  }
+  .step:last-child::after{display:none}
+  .step h3{font-size:15px;margin-bottom:8px}
+  .step p{font-size:13px;color:var(--muted);padding-right:8px}
+
+  /* ---------- faq ---------- */
+  .faq{max-width:860px;margin:0 auto}
+  details{border-bottom:1px solid var(--line);padding:22px 0}
+  summary{
+    cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:20px;
+    font-size:16px;font-weight:600;
+  }
+  summary::-webkit-details-marker{display:none}
+  summary::after{content:"+";color:var(--accent);font-size:20px;line-height:1;transition:transform .25s}
+  details[open] summary::after{transform:rotate(45deg)}
+  details p{margin-top:14px;color:var(--muted);font-size:14px;max-width:720px}
+
+  /* ---------- contact ---------- */
+  .contact{
+    background:
+      radial-gradient(600px 300px at 20% 0%,rgba(255,96,62,.16),transparent 70%),
+      var(--bg-soft);
+    border-top:1px solid var(--line);
+    text-align:center;
+  }
+  .contact h2{font-size:clamp(28px,3.6vw,42px);letter-spacing:-.02em;margin-bottom:18px}
+  .contact p{color:var(--muted);max-width:460px;margin:0 auto 32px;font-size:15px}
+  .contact-card{
+    display:inline-flex;flex-wrap:wrap;gap:26px;justify-content:center;
+    background:var(--card);border:1px solid var(--line);border-radius:16px;
+    padding:22px 30px;font-size:14px;color:var(--muted);
+  }
+  .contact-card b{color:var(--text);font-weight:600}
+
+  footer{border-top:1px solid var(--line);padding:30px 0;font-size:13px;color:#6F7688}
+  .foot{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+
+  /* ---------- reveal ---------- */
+  .reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease}
+  .reveal.in{opacity:1;transform:none}
+
+  /* ---------- responsive ---------- */
+  @media (max-width:980px){
+    .hero-grid{grid-template-columns:1fr;gap:44px}
+    .hero{padding-top:120px}
+    .hero-visual{max-width:560px}
+    .cases{grid-template-columns:1fr}
+    .service-grid{grid-template-columns:1fr}
+    .steps{grid-template-columns:repeat(2,1fr);gap:28px}
+    .step::after{display:none}
+    .stats-grid{grid-template-columns:repeat(2,1fr)}
+    .section-head{flex-direction:column;align-items:flex-start;gap:14px}
+  }
+  @media (max-width:720px){
+    .nav-links{
+      display:none;position:absolute;top:68px;left:0;right:0;
+      flex-direction:column;gap:0;background:var(--bg);
+      border-bottom:1px solid var(--line);padding:10px 24px 18px;
+    }
+    .nav-links.open{display:flex}
+    .nav-links a{padding:12px 0;border-bottom:1px solid #1A1E29;font-size:15px}
+    .menu-btn{display:block}
+    .nav-cta{display:none}
+    section{padding:72px 0}
+    .float-badge{right:0;bottom:-14px}
+    .steps{grid-template-columns:1fr}
+    .mini{height:220px}
+  }
+</style>
+</head>
+<body>
+
+<header id="header">
+  <div class="wrap nav">
+    <a class="logo" href="#top"><span class="logo-mark">R</span> RONNIE DESIGN</a>
+    <nav class="nav-links" id="navLinks">
+      <a href="#cases">作品</a>
+      <a href="#services">服务</a>
+      <a href="#process">流程</a>
+      <a href="#faq">常见问题</a>
+      <a href="#contact">联系</a>
+    </nav>
+    <a class="nav-cta" id="openContact" href="javascript:void(0)">聊个需求</a>
+    <button class="menu-btn" id="menuBtn" aria-label="菜单">☰</button>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="orb orb-a"></div>
+    <div class="orb orb-b"></div>
+    <div class="wrap hero-grid">
+      <div>
+        <span class="eyebrow">独立设计 · 开发 · 一个人交付</span>
+        <h1>把想法做成<br>能打开的<em>网页</em></h1>
+        <p class="lead">单页站、展示站、报名页，从设计到上线一个人完成。适合小店、工作室和个人品牌，不用对接设计师与程序员两拨人。</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#cases">看作品</a>
+          <a class="btn btn-ghost" href="#services">服务与价格</a>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="browser-card">
+          <div class="browser-bar">
+            <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+            <span class="url">your-brand.com</span>
+          </div>
+          <div class="hero-mock">
+            <div class="mock-nav">
+              <span class="mock-logo"></span>
+              <span class="mock-links"><span></span><span></span><span></span></span>
+            </div>
+            <h4>一间小店，<br>也值得一个像样的官网</h4>
+            <div class="lines"><span></span><span></span></div>
+            <div class="mock-btn"></div>
+            <div class="mock-cards"><div></div><div></div><div></div></div>
+          </div>
+        </div>
+        <div class="float-badge"><b>1–3 天</b> 首版交付</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <div class="stats">
+    <div class="wrap stats-grid">
+      <div class="stat"><b>1–3 天</b><span>首版交付</span></div>
+      <div class="stat"><b>2 次</b><span>免费修改</span></div>
+      <div class="stat"><b>7 天</b><span>上线后答疑</span></div>
+      <div class="stat"><b>100%</b><span>源码交付</span></div>
+    </div>
+  </div>
+
+  <!-- CASES -->
+  <section id="cases">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div>
+          <span class="kicker">Selected Works</span>
+          <h2>作品示意</h2>
+        </div>
+        <p>以下为版式示意，用于展示可实现的风格与结构。真实项目可替换成你的行业内容。</p>
+      </div>
+
+      <div class="cases">
+        <article class="case reveal">
+          <div class="shot">
+            <div class="mini photo">
+              <div class="m-nav"><i></i><u><s></s><s></s><s></s></u></div>
+              <div class="m-hero"><b></b><b></b><span></span></div>
+              <div class="m-grid"><i></i><i></i><i></i></div>
+            </div>
+          </div>
+          <div class="case-body">
+            <span class="tag">示意作品 · 单页站</span>
+            <h3>北岸摄影 · 工作室落地页</h3>
+            <p>深色作品墙突出照片，首屏直接给预约入口。</p>
+          </div>
+        </article>
+
+        <article class="case reveal">
+          <div class="shot">
+            <div class="mini cafe">
+              <div class="m-nav"><i></i><u><s></s><s></s><s></s></u></div>
+              <div class="m-hero"><b></b><b></b><span></span></div>
+              <div class="m-grid"><i></i><i></i><i></i></div>
+            </div>
+          </div>
+          <div class="case-body">
+            <span class="tag">示意作品 · 展示站</span>
+            <h3>MORNING · 咖啡店展示站</h3>
+            <p>暖色调与菜单卡片，手机端优先，到店信息一眼可见。</p>
+          </div>
+        </article>
+
+        <article class="case reveal">
+          <div class="shot">
+            <div class="mini dev">
+              <div class="m-nav"><i></i><u><s></s><s></s><s></s></u></div>
+              <div class="m-hero"><b></b><b></b><span></span></div>
+              <div class="m-grid"><i></i><i></i><i></i></div>
+            </div>
+          </div>
+          <div class="case-body">
+            <span class="tag">示意作品 · 个人主页</span>
+            <h3>独立开发者 · 个人主页</h3>
+            <p>极简排版承载项目列表与联系方式，适合技术型个人品牌。</p>
+          </div>
+        </article>
+
+        <article class="case reveal">
+          <div class="shot">
+            <div class="mini event">
+              <div class="m-nav"><i></i><u><s></s><s></s><s></s></u></div>
+              <div class="m-hero"><b></b><b></b><span></span></div>
+              <div class="m-grid"><i></i><i></i><i></i></div>
+              <div class="m-form"></div>
+            </div>
+          </div>
+          <div class="case-body">
+            <span class="tag">示意作品 · 活动页</span>
+            <h3>夏日市集 · 活动报名页</h3>
+            <p>高饱和渐变吸引点击，底部固定报名表单，转化路径短。</p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services" class="services">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div>
+          <span class="kicker">Services</span>
+          <h2>服务与价格</h2>
+        </div>
+        <p>明码标价，开工前确认范围。超出范围的部分先报价，不加隐藏费用。</p>
+      </div>
+
+      <div class="service-grid">
+        <div class="service reveal">
+          <span class="num">01 / 单页</span>
+          <h3>单页网站制作</h3>
+          <div class="price"><b>¥199</b>起</div>
+          <ul>
+            <li>一屏讲清你是谁、做什么</li>
+            <li>含手机端适配</li>
+            <li>含上线与源码交付</li>
+            <li>2 次免费修改</li>
+          </ul>
+          <div class="note">适合：工作室、门店、个人品牌、活动页</div>
+        </div>
+
+        <div class="service reveal">
+          <span class="num">02 / 展示站</span>
+          <h3>展示型网站</h3>
+          <div class="price"><b>¥399</b>起</div>
+          <ul>
+            <li>3–5 个页面，结构清晰</li>
+            <li>首页 + 服务 + 案例 + 联系</li>
+            <li>基础 SEO 与访问统计</li>
+            <li>含域名绑定指导</li>
+          </ul>
+          <div class="note">适合：需要完整介绍业务的门店与团队</div>
+        </div>
+
+        <div class="service reveal">
+          <span class="num">03 / 定制</span>
+          <h3>定制开发</h3>
+          <div class="price"><b>¥1999</b>起</div>
+          <ul>
+            <li>小程序 / 内部管理工具</li>
+            <li>数据看板与表单流程</li>
+            <li>需求梳理，分阶段交付</li>
+            <li>上线后 7 天答疑</li>
+          </ul>
+          <div class="note">适合：有明确业务流程、需要工具化的人</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROCESS -->
+  <section id="process">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div>
+          <span class="kicker">Process</span>
+          <h2>合作流程</h2>
+        </div>
+        <p>全程站内沟通与交易，按节点确认，不做黑盒交付。</p>
+      </div>
+
+      <div class="steps">
+        <div class="step reveal">
+          <h3>说清需求</h3>
+          <p>行业、参考站、必要文案与图片，10 分钟聊清楚。</p>
+        </div>
+        <div class="step reveal">
+          <h3>报价排期</h3>
+          <p>确认范围与价格，拍下付款后开始排期。</p>
+        </div>
+        <div class="step reveal">
+          <h3>首版设计</h3>
+          <p>先出首版页面，确认方向再继续细化。</p>
+        </div>
+        <div class="step reveal">
+          <h3>修改确认</h3>
+          <p>约定内 2 次修改，改到满意为止。</p>
+        </div>
+        <div class="step reveal">
+          <h3>上线交付</h3>
+          <p>部署上线，交付源码与使用说明，进入答疑期。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div>
+          <span class="kicker">FAQ</span>
+          <h2>常见问题</h2>
+        </div>
+        <p>下单前最常被问到的几个问题。</p>
+      </div>
+
+      <div class="faq">
+        <details class="reveal" open>
+          <summary>我需要准备什么？</summary>
+          <p>一句话介绍你的业务、想要的参考网站（有就发）、必要的文字与图片。没有文案也没关系，我会先给结构和文案建议。</p>
+        </details>
+        <details class="reveal">
+          <summary>多久能做好？</summary>
+          <p>单页站通常 1–3 天，展示型网站 3–7 天，定制开发按需求拆分排期。排期以付款时间为准，开工前会明确告知。</p>
+        </details>
+        <details class="reveal">
+          <summary>不满意怎么办？</summary>
+          <p>首版确认方向后再细化，方向性调整在首版阶段完成。约定范围内提供 2 次免费修改，超出部分提前报价。</p>
+        </details>
+        <details class="reveal">
+          <summary>网站能自己改内容吗？</summary>
+          <p>交付时会给源码和简短说明，改文字、换图片都很简单。需要后台管理的话，可以加做内容管理功能。</p>
+        </details>
+        <details class="reveal">
+          <summary>怎么付款？有保障吗？</summary>
+          <p>通过闲鱼拍下付款，验收满意后再确认收货，款项走平台担保。全程站内沟通，不私下转账。</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" class="contact">
+    <div class="wrap">
+      <h2>有想法，聊两句</h2>
+      <p>说清用途和大概预算，我会告诉你需要做什么、多久能好、价格多少。不合适也会直说。</p>
+      <div class="contact-card">
+        <span>闲鱼：<b>搜索 Ronnie</b></span>
+        <span>沟通：<b>站内私信</b></span>
+        <span>交易：<b>平台担保</b></span>
+      </div>
+      <div style="margin-top:34px">
+        <a class="btn btn-primary" href="#top">回到顶部</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <span>© 2026 Ronnie Design · 个人作品展示</span>
+    <span>本页作品为版式示意，案例可按你的行业定制</span>
+  </div>
+</footer>
+
+<!-- 联系弹窗 -->
+<div class="modal-mask" id="contactModal" aria-hidden="true">
+  <div class="modal" role="dialog" aria-label="联系方式">
+    <button class="modal-close" id="modalClose" aria-label="关闭">×</button>
+    <span class="eyebrow">Contact</span>
+    <h3>聊个需求</h3>
+    <p class="modal-lead">发邮件说明你的用途和大致预算，我会回复：需要做什么、工期、价格。不合适也会直说。</p>
+    <div class="email-box">
+      <span class="email-text" id="emailText">840195423@qq.com</span>
+      <button class="copy-btn" id="copyEmail">复制</button>
+    </div>
+    <div class="modal-actions">
+      <a class="btn btn-primary" id="mailtoBtn" href="mailto:840195423@qq.com?subject=%E7%BD%91%E7%AB%99%E9%9C%80%E6%B1%82%E5%92%A8%E8%AF%A2">写邮件</a>
+      <a class="btn btn-ghost" href="javascript:void(0)" onclick="document.getElementById('contactModal').classList.remove('open')">关闭</a>
+    </div>
+    <p class="modal-note">点「写邮件」没反应时（手机或未装邮件客户端），复制邮箱到 QQ 邮箱发送即可；也欢迎闲鱼搜索 Ronnie 站内私信。</p>
+  </div>
+</div>
+
+<style>
+  .modal-mask{
+    position:fixed;inset:0;z-index:100;display:grid;place-items:center;padding:24px;
+    background:rgba(5,7,11,.7);backdrop-filter:blur(6px);
+    opacity:0;visibility:hidden;transition:opacity .25s ease,visibility .25s ease;
+  }
+  .modal-mask.open{opacity:1;visibility:visible}
+  .modal{
+    position:relative;width:100%;max-width:460px;
+    background:var(--card);border:1px solid var(--line);border-radius:20px;
+    padding:34px 32px 28px;box-shadow:0 40px 90px rgba(0,0,0,.6);
+    transform:translateY(14px) scale(.97);transition:transform .25s ease;
+  }
+  .modal-mask.open .modal{transform:none}
+  .modal h3{font-size:24px;letter-spacing:-.02em;margin:14px 0 10px}
+  .modal-lead{font-size:14px;color:var(--muted);margin-bottom:22px}
+  .email-box{
+    display:flex;align-items:center;justify-content:space-between;gap:12px;
+    background:var(--bg-soft);border:1px solid var(--line);border-radius:12px;
+    padding:14px 16px;margin-bottom:18px;
+  }
+  .email-text{font-size:15px;font-weight:600;letter-spacing:.01em;word-break:break-all}
+  .copy-btn{
+    flex-shrink:0;font-size:13px;font-weight:600;color:var(--accent);
+    background:var(--accent-soft);border:1px solid rgba(255,96,62,.4);
+    border-radius:999px;padding:7px 16px;cursor:pointer;transition:background .2s;
+  }
+  .copy-btn:hover{background:rgba(255,96,62,.22)}
+  .copy-btn.done{color:#28C840;border-color:rgba(40,200,64,.4);background:rgba(40,200,64,.1)}
+  .modal-actions{display:flex;gap:12px;flex-wrap:wrap}
+  .modal-actions .btn{padding:12px 22px;font-size:14px}
+  .modal-note{margin-top:18px;font-size:13px;color:#6F7688}
+  .modal-close{
+    position:absolute;top:14px;right:14px;width:34px;height:34px;
+    border-radius:50%;border:1px solid var(--line);background:var(--bg-soft);
+    color:var(--muted);font-size:18px;cursor:pointer;line-height:1;
+    transition:color .2s,border-color .2s;
+  }
+  .modal-close:hover{color:var(--text);border-color:var(--accent)}
+</style>
+
+<script>
+  // 联系弹窗
+  const contactModal = document.getElementById('contactModal');
+  const openModal = () => {
+    contactModal.classList.add('open');
+    contactModal.setAttribute('aria-hidden', 'false');
+  };
+  const closeModal = () => {
+    contactModal.classList.remove('open');
+    contactModal.setAttribute('aria-hidden', 'true');
+  };
+  document.getElementById('openContact').addEventListener('click', openModal);
+  document.getElementById('modalClose').addEventListener('click', closeModal);
+  contactModal.addEventListener('click', (e) => { if (e.target === contactModal) closeModal(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+
+  // 复制邮箱
+  document.getElementById('copyEmail').addEventListener('click', async function () {
+    const email = document.getElementById('emailText').textContent.trim();
+    try {
+      await navigator.clipboard.writeText(email);
+    } catch (_) {
+      const ta = document.createElement('textarea');
+      ta.value = email; document.body.appendChild(ta);
+      ta.select(); document.execCommand('copy'); ta.remove();
+    }
+    this.textContent = '已复制'; this.classList.add('done');
+    setTimeout(() => { this.textContent = '复制'; this.classList.remove('done'); }, 1800);
+  });
+</script>
+
+<script>
+  // 导航滚动状态
+  const header = document.getElementById('header');
+  const onScroll = () => header.classList.toggle('scrolled', window.scrollY > 12);
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  // 移动端菜单
+  const navLinks = document.getElementById('navLinks');
+  document.getElementById('menuBtn').addEventListener('click', () => {
+    navLinks.classList.toggle('open');
+  });
+  navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    navLinks.classList.remove('open');
+  }));
+
+  // 滚动淡入
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        entry.target.style.transitionDelay = Math.min(i * 60, 240) + 'ms';
+        entry.target.classList.add('in');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+</script>
+</body>
+</html>
